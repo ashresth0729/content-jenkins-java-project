@@ -13,6 +13,19 @@ pipeline {
         sayHello 'Awesome Student!'
       }
     }
+   stage('Git Information') {
+      agent any
+
+      steps {
+        echo "My Branch Name: ${env.BRANCH_NAME}"
+
+        script {
+          def myLib = new linuxacademy.git.gitStuff();
+
+          echo "My Commit: ${myLib.gitCommit("${env.WORKSPACE}/.git")}"
+        }
+      }
+    }
 
     
     
@@ -40,13 +53,7 @@ pipeline {
       }
     }
     
-    stage('SonarQube analysis'){
-      def mvnHome = tool name: 'M3', type: 'maven'
-      withSonarQubeEnv('sonar') {
-        sh "${mvnHome}/bin/mvn sonar:sonar"
-      }
-     }
-    
+   
     
     stage('deploy') {
       agent {
