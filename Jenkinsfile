@@ -48,6 +48,15 @@ pipeline {
         }
       }
     }
+    
+     stage('SonarQube analysis'){
+      def mvnHome = tool name: 'M3', type: 'maven'
+      withSonarQubeEnv('sonar') {
+        sh "${mvnHome}/bin/mvn sonar:sonar"
+      }
+     }
+    
+    
     stage('deploy') {
       agent {
         label 'apache'
